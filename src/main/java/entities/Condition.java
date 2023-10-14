@@ -14,5 +14,4 @@ public class Condition {
 
     @JsonProperty("text")
     String text;
-
 }

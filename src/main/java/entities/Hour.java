@@ -23,5 +23,4 @@ public class Hour {
 
     @JsonProperty("wind_kph")
     Double windKph;
-
 }

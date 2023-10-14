@@ -19,5 +19,4 @@ public class ForecastDay {
 
     @JsonProperty("hour")
     List<Hour> hours;
-
 }

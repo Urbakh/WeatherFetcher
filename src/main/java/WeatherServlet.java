@@ -30,7 +30,7 @@ public class WeatherServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         if (city != null) {
-            String weatherData = days == null ? getCurrentWeatherData(city) : getForecastWeatherData(days, city);
+            String weatherData = getForecastWeatherData(city, days);
 
             WeatherApiObject data = parseWeatherData(weatherData);
 
@@ -41,12 +41,16 @@ public class WeatherServlet extends HttpServlet {
                 out.println("Current temperature" + ": " + data.getCurrent().getTemp());
                 out.println("Current weather condition" + ": " + data.getCurrent().getCondition().getText());
                 out.println("Current speed of wind" + ": " + data.getCurrent().getWindKph());
-
+                out.println();
 
                 for (int i = 0; i < data.getForecast().getForecastDay().size(); i++) {
                     ForecastDay forecastDay = data.getForecast().getForecastDay().get(i);
                     for (int j = 0; j < forecastDay.getHours().size(); j++) {
-                        out.println("Forecast weather" + ": " + forecastDay.getHours().get(j).getTime());
+                        out.println("Forecast weather time: " + forecastDay.getHours().get(j).getTime());
+                        out.println("temperature: " + forecastDay.getHours().get(j).getTemp());
+                        out.println("condition: " + forecastDay.getHours().get(j).getCondition().getText());
+                        out.println("speed of wind: " + forecastDay.getHours().get(j).getWindKph());
+                        out.println();
                     }
                 }
             }
@@ -68,12 +72,7 @@ public class WeatherServlet extends HttpServlet {
         return null;
     }
 
-    private String getCurrentWeatherData(String city) {
-
-        return httpGet(WEATHERAPI_HOST + "/v1/current.json?key=" + WEATHERAPI_KEY + "&q=" + city);
-    }
-
-    private String getForecastWeatherData(String days, String city) {
+    private String getForecastWeatherData(String city, String days) {
 
         return httpGet(WEATHERAPI_HOST + "/v1/forecast.json?key=" + WEATHERAPI_KEY + "&q=" + city + "&days=" + days);
     }
