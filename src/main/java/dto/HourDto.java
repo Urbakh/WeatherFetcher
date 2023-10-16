@@ -1,4 +1,4 @@
-package entities;
+package dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,13 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Current {
+public class HourDto {
 
-    @JsonProperty("condition")
-    Condition condition;
+    @JsonProperty("time")
+    String time;
 
     @JsonProperty("temp_c")
     Double temp;
+
+    @JsonProperty("condition")
+    ConditionDto condition;
 
     @JsonProperty("wind_kph")
     Double windKph;

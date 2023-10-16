@@ -1,6 +1,7 @@
-package entities;
+package dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,11 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WeatherApiObject {
+public class CurrentDto {
 
-    Current current;
+    @JsonProperty("condition")
+    ConditionDto condition;
 
-    Location location;
+    @JsonProperty("temp_c")
+    Double temp;
 
-    Forecast forecast;
+    @JsonProperty("wind_kph")
+    Double windKph;
 }

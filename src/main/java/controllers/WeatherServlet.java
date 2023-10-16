@@ -1,6 +1,11 @@
+package controllers;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entities.ForecastDay;
-import entities.WeatherApiObject;
+import dao.WeatherRepository;
+import dto.ForecastDayDto;
+import dto.WeatherApiObjectDto;
+import entities.Weather;
+import lombok.Setter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,8 +26,11 @@ public class WeatherServlet extends HttpServlet {
 
     private static final String WEATHERAPI_KEY = "f1d5b8e828d3414a86f115208221401";
 
+    @Setter
+    private WeatherRepository weatherRepository = new WeatherRepository();
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String city = req.getParameter("city");
         String days = req.getParameter("days");
         resp.setContentType("text/plain");
@@ -32,19 +40,19 @@ public class WeatherServlet extends HttpServlet {
         if (city != null) {
             String weatherData = getForecastWeatherData(city, days);
 
-            WeatherApiObject data = parseWeatherData(weatherData);
+            WeatherApiObjectDto data = parseWeatherData(weatherData);
 
             if (data == null) {
                 out.print("City incorrect or parsing failed");
             } else {
-                out.println("Current time in city " + city + ": " + data.getLocation().getLocaltime());
+                out.println("Current time in city " + city + ": " + data.getLocation().getLocalTime());
                 out.println("Current temperature" + ": " + data.getCurrent().getTemp());
                 out.println("Current weather condition" + ": " + data.getCurrent().getCondition().getText());
                 out.println("Current speed of wind" + ": " + data.getCurrent().getWindKph());
                 out.println();
 
                 for (int i = 0; i < data.getForecast().getForecastDay().size(); i++) {
-                    ForecastDay forecastDay = data.getForecast().getForecastDay().get(i);
+                    ForecastDayDto forecastDay = data.getForecast().getForecastDay().get(i);
                     for (int j = 0; j < forecastDay.getHours().size(); j++) {
                         out.println("Forecast weather time: " + forecastDay.getHours().get(j).getTime());
                         out.println("temperature: " + forecastDay.getHours().get(j).getTemp());
@@ -53,6 +61,8 @@ public class WeatherServlet extends HttpServlet {
                         out.println();
                     }
                 }
+
+                weatherRepository.save(Weather.fromDto(data));
             }
         } else {
             out.print("No query parameter 'city' defined" );
@@ -60,11 +70,11 @@ public class WeatherServlet extends HttpServlet {
         out.close();
     }
 
-    private WeatherApiObject parseWeatherData(String json) {
+    private WeatherApiObjectDto parseWeatherData(String json) {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            return mapper.readValue(json, WeatherApiObject.class);
+            return mapper.readValue(json, WeatherApiObjectDto.class);
 
         } catch (IllegalArgumentException | IOException e) {
             e.printStackTrace();
@@ -98,7 +108,7 @@ public class WeatherServlet extends HttpServlet {
 
                 return response.toString();
             } else {
-                System.out.println("Request failed with status code: ${responseCode}");
+                System.out.println("Request failed with status code: " + responseCode);
                 return null;
             }
         } catch (Exception e) {

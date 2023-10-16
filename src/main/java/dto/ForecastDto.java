@@ -1,4 +1,4 @@
-package entities;
+package dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,21 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Hour {
+public class ForecastDto {
 
-    @JsonProperty("time")
-    String time;
-
-    @JsonProperty("temp_c")
-    Double temp;
-
-    @JsonProperty("condition")
-    Condition condition;
-
-    @JsonProperty("wind_kph")
-    Double windKph;
+    @JsonProperty("forecastday")
+    List<ForecastDayDto> forecastDay;
 }
