@@ -1,6 +1,6 @@
 package controllers;
 
-import dao.WeatherRepository;
+import services.WeatherRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

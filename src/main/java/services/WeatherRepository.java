@@ -1,6 +1,8 @@
-package dao;
+package services;
 
+import dao.WeatherDao;
 import entities.Weather;
+import utils.Util;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -9,25 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class WeatherRepository {
-    private Connection connection;
+public class WeatherRepository implements WeatherDao {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH);
 
-    private final String USERNAME = "postgres";
+    private final Connection connection = Util.JDBCConnection();
 
-    private final String PASSWORD = "root";
-
-    public WeatherRepository() {
-        try {
-            Class.forName("org.postgresql.Driver");
-
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/weatherapi", USERNAME, PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    @Override
     public void save(Weather weather) {
         String insertSQL = "INSERT INTO weather (city, date, temp, speed, condition) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement insertStatement = connection.prepareStatement(insertSQL)) {
@@ -43,6 +33,7 @@ public class WeatherRepository {
         }
     }
 
+    @Override
     public List<Weather> getAll() {
         List<Weather> weathers = new ArrayList<>();
         String selectAllSQL = "SELECT * FROM weather";

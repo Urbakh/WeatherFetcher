@@ -1,7 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dao.WeatherRepository;
+import services.WeatherRepository;
 import dto.ForecastDayDto;
 import dto.WeatherApiObjectDto;
 import entities.Weather;
@@ -19,6 +19,10 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Servlet implementation class WeatherServlet
+ * This servlet retrieves weather forecast data from an external API based on the provided city and number of days.
+ */
 @WebServlet("/weather")
 public class WeatherServlet extends HttpServlet {
 
@@ -29,6 +33,15 @@ public class WeatherServlet extends HttpServlet {
     @Setter
     private WeatherRepository weatherRepository = new WeatherRepository();
 
+    /**
+     * Handles GET requests from clients.
+     * Retrieves weather data based on provided city and number of days, and saves the data to the database.
+     *
+     * @param req  The HttpServletRequest object containing client request information.
+     * @param resp The HttpServletResponse object used to send the response back to the client.
+     * @throws ServletException If a servlet-specific error occurs.
+     * @throws IOException      If an I/O error occurs while handling the request.
+     */
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String city = req.getParameter("city");

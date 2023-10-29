@@ -1,5 +1,5 @@
 import controllers.WeatherServlet;
-import dao.WeatherRepository;
+import services.WeatherRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
