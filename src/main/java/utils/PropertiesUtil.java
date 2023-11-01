@@ -12,6 +12,9 @@ public final class PropertiesUtil {
         loadProperties();
     }
 
+    private PropertiesUtil() {
+    }
+
     public static String get(String key) {
         return PROPERTIES.getProperty(key);
     }
@@ -22,9 +25,5 @@ public final class PropertiesUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private PropertiesUtil() {
-
     }
 }
